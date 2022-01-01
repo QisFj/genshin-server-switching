@@ -1,6 +1,29 @@
 
-# todo: load genshin root from user input
-$GenshinRoot="M:\网络游戏\原神\Genshin Impact"
+# check if path exit
+$MayExistPaths=@(
+    "M:\网络游戏\原神\Genshin Impact"
+    "X:\网络游戏\原神\yuanshen"
+)
+
+$GenshinRoot=""
+foreach ($MayExistPath in $MayExistPaths)
+{
+    if (Test-Path -path $MayExistPath)
+    { 
+    # it is
+        $GenshinRoot=$MayExistPath
+        break
+    }
+    # not this, try next
+}
+
+# Test has $GenshinRoot alreay been set
+if(!$GenshinRoot){
+    # if not, ask user input a path
+    $GenshinRoot = Read-Host 'Input Genshi Root Path:'
+}
+
+Write-Host '$GenshinRoot is '"$GenshinRoot" # log
 
 
 # Get-IniContent and Out-IniFile are copied from:
@@ -74,4 +97,4 @@ $Config2["General"].channel=14
 $Config2["General"].sub_channel=0
 Out-IniFile $Config2 "$GenshinRoot/Genshin Impact Game/config.ini"
 
-# Copy-Item $PSScriptRoot/PCGameSDK.dll "$GenshinRoot\Genshin Impact Game\YuanShen_Data\Plugins"
+Copy-Item $PSScriptRoot/PCGameSDK.dll "$GenshinRoot\Genshin Impact Game\YuanShen_Data\Plugins"
