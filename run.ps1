@@ -1,26 +1,32 @@
-
-# check if path exit
-$MayExistPaths=@(
-    "M:\网络游戏\原神\Genshin Impact"
-    "X:\网络游戏\原神\yuanshen"
+# check usual path
+$MayRootName = @(
+    "Genshin Impact"
+    "yuanshen"
 )
+$MayExistPaths = Get-PSDrive -PSProvider FileSystem | ForEach-Object {
+    $DriverName = $_.Name
+    $MayRootName | ForEach-Object { $DriverName + ":\网络游戏\原神\" + $_ } 
+}
 
 $GenshinRoot=""
 foreach ($MayExistPath in $MayExistPaths)
 {
+    Write-Host "Checking $MayExistPath"
     if (Test-Path -path $MayExistPath)
     { 
     # it is
+        Write-Host "Exist"
         $GenshinRoot=$MayExistPath
         break
     }
     # not this, try next
+    Write-Host "Not exist"
 }
 
 # Test has $GenshinRoot alreay been set
 if(!$GenshinRoot){
     # if not, ask user input a path
-    $GenshinRoot = Read-Host 'Input Genshi Root Path:'
+    $GenshinRoot = Read-Host 'Input Genshi Root Path'
 }
 
 Write-Host '$GenshinRoot is '"$GenshinRoot" # log
@@ -98,3 +104,6 @@ $Config2["General"].sub_channel=0
 Out-IniFile $Config2 "$GenshinRoot/Genshin Impact Game/config.ini"
 
 Copy-Item $PSScriptRoot/PCGameSDK.dll "$GenshinRoot\Genshin Impact Game\YuanShen_Data\Plugins"
+
+Write-Host 'Done, Press any key to exit.';
+$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
