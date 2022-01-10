@@ -10,3 +10,4 @@ https://www.bilibili.com/video/BV1PQ4y127X3
 
 Easier way to download: https://github.com.cnpmjs.org/QisFj/genshin-server-switching/archive/refs/heads/main.zip
 
+With helper: https://github.com/QisFj/genshin-server-switching/archive/refs/heads/with-helper.zip
