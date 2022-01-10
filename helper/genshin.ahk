@@ -70,36 +70,52 @@ Return
     }
 Return
 
-; 5个探索派遣
-Expedition(x1, y1, x2, y2, x3, y3) {
+
+ExpeditionCharacter(targetPosX, targetPoxY, charPosX, charPosY){
     BlockInput, MouseMove
-    MouseMove, x1, y1
-    Sleep 50
-    Click
-    MouseMove, x2, y2
-    Sleep 50
-    Click
-    MouseMove, 1650, 1000
-    Click
+    Click %targetPosX%, %targetPoxY%
+    Sleep 100
+    Click 2300, 1360 ; 领取
     Sleep 250
-    Click
+    Click ; 关闭 领取页
+    Sleep 100
+    Click 2400, 900 ; 20h
+    Sleep 100
+    Click 2300, 1360 ; 选择角色
     Sleep 250
-    Click
-    MouseMove, x3, y3
-    Sleep 50
-    Click
+    Click %charPosX%, %charPosY%
+    Sleep 250
     BlockInput, MouseMoveOff
 }
 
-F6::
+; 探索派遣
+F6:: ; only work on 2560 x 1440
+    Send, {f}
+    Sleep 500
+    Send, {f}
+    Sleep 500
+    Click 1800, 880 ; 蒙德 凯瑟琳
+    Sleep 500
+
     ; 蒙德
-    Expedition(150, 165, 1063, 333, 300, 150)
-    Expedition(150, 165, 1176, 659, 300, 300)
+    Click 180, 220
+    Sleep 500
+
+    ExpeditionCharacter(1400, 450, 160, 220) ; 低语森林     菲谢尔
+    ExpeditionCharacter(1600, 900, 160, 390) ; 达达乌帕谷   班尼特
+
     ; 璃月
-    Expedition(150, 230, 724, 333, 300, 150)
-    Expedition(150, 230, 961, 454, 300, 300)
+    Click 180, 310
+    Sleep 500
+    
+    ExpeditionCharacter(1300, 600, 160, 220) ; 摇光滩   刻晴
+    ExpeditionCharacter(1075, 745, 160, 390) ; 归离原   重云
+
     ; 稻妻
-    Expedition(150, 300, 1101, 283, 300, 150)
+    Click 180, 410
+    Sleep 800
+    
+    ExpeditionCharacter(1100, 1100, 160, 220) ; 踏鞴砂  九条裟罗
 
     Sleep 400
     Send, {esc}
