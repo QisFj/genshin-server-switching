@@ -7,6 +7,10 @@ function CheckLastExitCode {
         Exit $LAST
     }
 }
+function CleanLine {
+    Write-Host -NoNewline "`r$(" " * 64)`r"
+}
+
 Set-Location $PSScriptRoot
 
 # clean output directory
@@ -37,11 +41,21 @@ Ahk2Exe `
     /compress 0
 # CheckLastExitCode not make sense here, just check if the output exists
 # ahk2exe compile async, so we need to wait for it
-Start-Sleep -Seconds 2
+Write-Host -NoNewline "Waiting for ahk compile"
+for ($i=0; $i -lt 10; $i++) {
+    if (Test-Path ./output/temp/genshin-ahk.exe) {
+        break
+    }
+    CleanLine
+    Write-Host -NoNewline "waiting for ahk compile$("." * ($i % 5))"
+    Start-Sleep -Seconds 1
+}
+CleanLine
 if (!(Test-Path ./output/temp/genshin-ahk.exe)) {
-    Write-Host "AHK compile failed" -ForegroundColor Red
+    Write-Host "ahk compile failed" -ForegroundColor Red
     Exit 1
 }
+Write-Host "ahk compile success"
 Compress-Archive -Path ./output/temp/* -Destination ./output/with-helper.zip -CompressionLevel Optimal
 Remove-Item ./output/temp -Recurse -Force
 Write-Output "with-helper: build success"
