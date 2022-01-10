@@ -7,7 +7,3 @@ https://www.bilibili.com/video/BV1PQ4y127X3
 2022年1月5日（2.4版本）测试有效。
 
 脚本是一次性的（不幂等），目标场景是在网吧玩B服。
-
-Easier way to download: https://github.com.cnpmjs.org/QisFj/genshin-server-switching/archive/refs/heads/main.zip
-
-With helper: https://github.com/QisFj/genshin-server-switching/archive/refs/heads/with-helper.zip

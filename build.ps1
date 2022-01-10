@@ -15,14 +15,14 @@ if (Test-Path ./output) {
 }
 New-Item -ItemType Directory ./output | Out-Null # see https://stackoverflow.com/a/46586504/6426001
 
-# build main
-Write-Output "main: building..."
+# build pure
+Write-Output "pure: building..."
 New-Item -ItemType Directory ./output/temp | Out-Null # create temp dir
 Copy-Item ./run.ps1 ./output/temp/
 Copy-Item ./PCGameSDK.dll ./output/temp/
-Compress-Archive -Path ./output/temp/* -Destination ./output/main.zip -CompressionLevel Optimal
+Compress-Archive -Path ./output/temp/* -Destination ./output/pure.zip -CompressionLevel Optimal
 Remove-Item ./output/temp -Recurse -Force
-Write-Output "main: build success"
+Write-Output "pure: build success"
 
 
 # build with helper
