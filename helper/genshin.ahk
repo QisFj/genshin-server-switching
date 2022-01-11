@@ -1,5 +1,6 @@
 ﻿#SingleInstance Force
 #InstallMouseHook
+#Include expedition.ahk
 ; some copied from https://github.com/ganlvtech/genshin-impact-ahk/blob/main/%E5%8E%9F%E7%A5%9E.ahk
 
 ; https://stackoverflow.com/questions/43298908/how-to-add-administrator-privileges-to-autohotkey-script
@@ -16,12 +17,23 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
     ExitApp
 }
 
-repeatClickLeft:=0
+repeatClickLeft:=1
 spaceWait:=0
+resolution:="2560x1440"
+Gui, Add, Text, w400 h16, Usage:
+Gui, Add, Text, w400 h16 y+5, F键   连发
+Gui, Add, Text, w400 h16 y+5, Space 连发
+Gui, Add, Text, w400 h16 y+5, F6    探索派遣 
 
-Gui, Add, CheckBox,w400 h24 gOnSubmmit vrepeatClickLeft, 左键连发，长按鼠标前侧键触发
-guicontrol,, vrepeatClickLeft, 1 ; set default checked
-Gui, Add, CheckBox,w400 h24 gOnSubmmit vspaceWait, 空格连发延迟触发，离开浪船需要长按空格
+Gui, Add, Text, w400 h16 y+10, Options:
+
+Gui, Add, CheckBox,w400 h16 y+5 gOnSubmmit vrepeatClickLeft Checked, 左键连发，长按鼠标前侧键触发
+Gui, Add, CheckBox,w400 h16 y+5 gOnSubmmit vspaceWait, 空格连发延迟触发，离开浪船需要长按空格
+
+Gui, Add, Text,  h16 y+5, 分辨率
+Gui, Add, DropDownList, x+16 yp-2 gOnSubmmit Choose1 vresolution, 2560x1440|1920x1080
+
+Gui, Add, Button, xm y+10 gOnClickDebugInfo Default w80, Debug Info
 
 Gui, Show
 Return
@@ -34,13 +46,27 @@ OnSubmmit:
     Gui, Submit, Nohide
 Return
 
-#IfWinActive ahk_exe YuanShen.exe
+OnClickDebugInfo:
+    MsgBox, 
+    (
+repeatClickLeft:    %repeatClickLeft%
+spaceWait:          %spaceWait%
+resolution:         %resolution%
+    )
+Return
+
+; #IfWinActive ahk_exe YuanShen.exe
 
 ; 按住空格等于狂按空格（按住 1.3 秒之后才触发，因为离开浪船需要按住空格）
 ~*Space::
+    KeyWait, Space, T0.3 ; at least wait 0.3s
+    If Not ErrorLevel
+    {
+        Return
+    }
     if spaceWait 
     {
-        KeyWait, Space, T1.3
+        KeyWait, Space, T1
         If Not ErrorLevel
         {
             Return
@@ -70,55 +96,14 @@ Return
     }
 Return
 
-
-ExpeditionCharacter(targetPosX, targetPoxY, charPosX, charPosY){
-    BlockInput, MouseMove
-    Click %targetPosX%, %targetPoxY%
-    Sleep 100
-    Click 2300, 1360 ; 领取
-    Sleep 250
-    Click ; 关闭 领取页
-    Sleep 100
-    Click 2400, 900 ; 20h
-    Sleep 100
-    Click 2300, 1360 ; 选择角色
-    Sleep 250
-    Click %charPosX%, %charPosY%
-    Sleep 250
-    BlockInput, MouseMoveOff
-}
-
 ; 探索派遣
-F6:: ; only work on 2560 x 1440
-    Send, {f}
-    Sleep 500
-    Send, {f}
-    Sleep 500
-    Click 1800, 880 ; 蒙德 凯瑟琳
-    Sleep 500
-
-    ; 蒙德
-    Click 180, 220
-    Sleep 500
-
-    ExpeditionCharacter(1400, 450, 160, 220) ; 低语森林     菲谢尔
-    ExpeditionCharacter(1600, 900, 160, 390) ; 达达乌帕谷   班尼特
-
-    ; 璃月
-    Click 180, 310
-    Sleep 500
-    
-    ExpeditionCharacter(1300, 600, 160, 220) ; 摇光滩   刻晴
-    ExpeditionCharacter(1075, 745, 160, 390) ; 归离原   重云
-
-    ; 稻妻
-    Click 180, 410
-    Sleep 800
-    
-    ExpeditionCharacter(1100, 1100, 160, 220) ; 踏鞴砂  九条裟罗
-
-    Sleep 400
-    Send, {esc}
+F6::
+    Switch resolution
+    {
+    Case "2560x1440": Use2560x1440()
+    Case "1920x1080": Use1920x1080()
+    }
+    ExpeditionAll()
 Return
 
 ~$XButton2::
