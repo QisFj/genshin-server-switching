@@ -303,8 +303,8 @@ ExpeditionAll(){
     Send, {f}
     Sleep 1000
     Send, {f}
-    Sleep 750
-    Click, %use_ksl_x%, %use_ksl_y% ; 蒙德 凯瑟琳
+    Sleep 1000
+    Click %use_ksl_x%, %use_ksl_y% ; 蒙德 凯瑟琳
     Sleep 500
 
     ; 蒙德
