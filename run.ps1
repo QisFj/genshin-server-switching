@@ -8,6 +8,12 @@ $MayExistPaths = Get-PSDrive -PSProvider FileSystem | ForEach-Object {
     $MayRootName | ForEach-Object { $DriverName + ":\Õ¯¬Á”Œœ∑\‘≠…Ò\" + $_ } 
 }
 
+$ScriptRoot=$PSScriptRoot
+if(!$ScriptRoot) {
+    # for Powershell which is older than 3.0, $PSScriptRoot is not defined
+    # use
+    $ScriptRoot = Split-Path $MyInvocation.MyCommand.Path
+}
 $GenshinRoot=""
 foreach ($MayExistPath in $MayExistPaths)
 {
@@ -103,7 +109,7 @@ $Config2["General"].channel=14
 $Config2["General"].sub_channel=0
 Out-IniFile $Config2 "$GenshinRoot/Genshin Impact Game/config.ini"
 
-Copy-Item $PSScriptRoot/PCGameSDK.dll "$GenshinRoot\Genshin Impact Game\YuanShen_Data\Plugins"
+Copy-Item $ScriptRoot/PCGameSDK.dll "$GenshinRoot\Genshin Impact Game\YuanShen_Data\Plugins"
 
 Write-Host 'Done, Press any key to exit.';
 $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
