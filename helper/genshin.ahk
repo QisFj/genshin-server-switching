@@ -17,6 +17,8 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
     ExitApp
 }
 
+SetTimer, Repeat, 150
+
 repeatClickLeft:=1
 spaceWait:=0
 resolution:="2560x1440"
@@ -55,7 +57,20 @@ resolution:         %resolution%
     )
 Return
 
-; #IfWinActive ahk_exe YuanShen.exe
+global spaceRepeatEnable:=0
+global clickRepeatEnable:=0
+
+#IfWinActive ahk_exe YuanShen.exe
+
+Repeat:
+    if spaceRepeatEnable and GetKeyState("Space", "P") {
+        Send {Space}
+    }
+    if clickRepeatEnable and GetKeyState("XButton2", "P") {
+        Click
+    }
+return  
+
 
 ; 按住空格等于狂按空格（按住 1.3 秒之后才触发，因为离开浪船需要按住空格）
 ~*Space::
@@ -72,15 +87,11 @@ Return
             Return
         }
     }
-    Loop
-    {
-        Send, {Space}
-        KeyWait, Space, T0.05
-        If Not ErrorLevel
-        {
-            Break
-        }
-    }
+    spaceRepeatEnable=1
+Return
+
+Space up::
+    spaceRepeatEnable=0
 Return
 
 ; 按住 f 等于狂按 f
@@ -106,17 +117,13 @@ F6::
     ExpeditionAll()
 Return
 
-~$XButton2::
+~*XButton2::
     if repeatClickLeft
     {
-        Loop
-        {
-            Click
-            KeyWait, XButton2, T0.1
-            If Not ErrorLevel
-            {
-                Break
-            }
-        }
+	    clickRepeatEnable=1
     }
+Return
+
+XButton2 up::
+    clickRepeatEnable=0
 Return
