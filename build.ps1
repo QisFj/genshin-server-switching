@@ -19,14 +19,12 @@ if (Test-Path ./output) {
 }
 New-Item -ItemType Directory ./output | Out-Null # see https://stackoverflow.com/a/46586504/6426001
 
-# copy README
-Copy-Item ./README.md ./output/README.md
-
 # build pure
 Write-Output "pure: building..."
 New-Item -ItemType Directory ./output/temp | Out-Null # create temp dir
 Copy-Item ./run.ps1 ./output/temp/
 Copy-Item ./PCGameSDK.dll ./output/temp/
+Copy-Item ./README.md ./output/temp/
 Compress-Archive -Path ./output/temp/* -Destination ./output/pure.zip -CompressionLevel Optimal
 Remove-Item ./output/temp -Recurse -Force
 Write-Output "pure: build success"
@@ -37,6 +35,7 @@ Write-Output "with-helper: building..."
 New-Item -ItemType Directory ./output/temp | Out-Null # create temp dir
 Copy-Item ./run.ps1 ./output/temp/
 Copy-Item ./PCGameSDK.dll ./output/temp/
+Copy-Item ./README.md ./output/temp/
 # ahk output based on ./helper 
 Ahk2Exe `
     /in ./helper/genshin.ahk `
