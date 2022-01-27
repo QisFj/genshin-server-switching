@@ -32,11 +32,22 @@ foreach ($MayExistPath in $MayExistPaths)
 # Test has $GenshinRoot alreay been set
 if(!$GenshinRoot){
     # if not, ask user input a path
-    $GenshinRoot = Read-Host 'Input Genshi Root Path'
+    $GenshinRoot = Read-Host 'Input Genshi Root Path(where you can found launcher.exe)'
 }
 
-Write-Host '$GenshinRoot is '"$GenshinRoot" # log
+Write-Host '$GenshinRoot is '"$GenshinRoot"
+$Config1Path="$GenshinRoot/config.ini"
+$Config2Path="$GenshinRoot/Genshin Impact Game/config.ini"
 
+# Check if both two config file exist
+if(!(Test-Path $Config1Path)) {
+    Write-Host "$Config1Path not exist"
+    exit
+}
+if(!(Test-Path $Config2Path)) {
+    Write-Host "$Config2Path not exist"
+    exit
+}
 
 # Get-IniContent and Out-IniFile are copied from:
 # https://devblogs.microsoft.com/scripting/use-powershell-to-work-with-any-ini-file/
@@ -97,19 +108,70 @@ function Out-IniFile($InputObject, $filePath)
     }
 }
 
-$Config1 = Get-IniContent "$GenshinRoot/config.ini"
-$Config1["General"].cps="bilibili"
-$Config1["General"].channel=14
-$Config1["General"].sub_channel=0
-Out-IniFile $Config1 "$GenshinRoot/config.ini"
+$Config1 = Get-IniContent $Config1Path
+$Config2 = Get-IniContent $Config2Path
 
-$Config2 = Get-IniContent "$GenshinRoot/Genshin Impact Game/config.ini"
-$Config2["General"].cps="bilibili"
-$Config2["General"].channel=14
-$Config2["General"].sub_channel=0
-Out-IniFile $Config2 "$GenshinRoot/Genshin Impact Game/config.ini"
+Write-Host "Current config:"
+Write-Host " $GenshinRoot/config.ini[launcher]:"
+Write-Host "  cps=$($Config1["launcher"].cps)"
+Write-Host "  channel=$($Config1["launcher"].channel)"
+Write-Host "  sub_channel=$($Config1["launcher"].sub_channel)"
+Write-Host " $GenshinRoot/Genshin Impact Game/config.ini[General]"
+Write-Host "  cps=$($Config2["General"].cps)"
+Write-Host "  channel=$($Config2["General"].channel)"
+Write-Host "  sub_channel=$($Config2["General"].sub_channel)"
 
-Copy-Item $ScriptRoot/PCGameSDK.dll "$GenshinRoot\Genshin Impact Game\YuanShen_Data\Plugins"
+if($Config1["launcher"].cps -eq "bilibili") {
+    Write-Host "It's bilibili server, swith to mihoyo server"
+    $Config1["launcher"].cps="mihoyo"
+    $Config1["launcher"].channel=1
+    $Config1["launcher"].sub_channel=1
+    $Config2["General"].cps="mihoyo"
+    $Config2["General"].channel=1
+    $Config2["General"].sub_channel=1
+} else {
+    Write-Host "It isn't bilibili server, swith to bilibili server"
+    $Config1["launcher"].cps="bilibili"
+    $Config1["launcher"].channel=14
+    $Config1["launcher"].sub_channel=0
+    $Config2["General"].cps="bilibili"
+    $Config2["General"].channel=14
+    $Config2["General"].sub_channel=0
+}
 
-Write-Host 'Done, Press any key to exit.';
-$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
+
+$confirmation = Read-Host "Execute? [y/n]"
+while($confirmation -ne "y")
+{
+    if ($confirmation -eq 'n') {
+        Write-Host "Exit"
+        exit
+    }
+    $confirmation = Read-Host "Invalid input, Execute? [y/n]"
+}
+
+Out-IniFile $Config1 $Config1Path
+Out-IniFile $Config2 $Config2Path
+
+Write-Host "Current config:"
+Write-Host " $GenshinRoot/config.ini[launcher]:"
+Write-Host "  cps=$($Config1["launcher"].cps)"
+Write-Host "  channel=$($Config1["launcher"].channel)"
+Write-Host "  sub_channel=$($Config1["launcher"].sub_channel)"
+Write-Host " $GenshinRoot/Genshin Impact Game/config.ini[General]"
+Write-Host "  cps=$($Config2["General"].cps)"
+Write-Host "  channel=$($Config2["General"].channel)"
+Write-Host "  sub_channel=$($Config2["General"].sub_channel)"
+
+if (!(Test-Path "$GenshinRoot\Genshin Impact Game\YuanShen_Data\Plugins")) {
+    # copy PCGameSDK.dll to Genshin Impact Game, if this dll not exist
+    Write-Host "PCGameSDK.dll not exist, copy it"
+    Copy-Item $ScriptRoot/PCGameSDK.dll "$GenshinRoot\Genshin Impact Game\YuanShen_Data\Plugins"
+}
+
+Write-Host 'Done, Press any key to exit. Specailly, Press "y" to run Genshin Impact launcher';
+$key = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
+if ($key.Character -eq "y") {
+    Write-Output "Run Genshin Impact launcher"
+    Start-Process "$GenshinRoot/launcher.exe"
+}

@@ -19,6 +19,9 @@ if (Test-Path ./output) {
 }
 New-Item -ItemType Directory ./output | Out-Null # see https://stackoverflow.com/a/46586504/6426001
 
+# copy README
+Copy-Item ./README.md ./output/README.md
+
 # build pure
 Write-Output "pure: building..."
 New-Item -ItemType Directory ./output/temp | Out-Null # create temp dir
