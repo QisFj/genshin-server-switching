@@ -4,6 +4,11 @@ $NoticeColor = "Yellow"
 $ErrorColor = "Red"
 $SuccessColor = "Green"
 
+# configs
+$Configs = @{
+    bilibili = @{cps = "bilibili"; channel = 14; sub_channel = 0 }
+    mihoyo   = @{cps = "mihoyo"; channel = 1; sub_channel = 1 }
+}
 
 # check usual path
 $MayRootName = @(
@@ -138,35 +143,29 @@ function Show-AllConf() {
     Show-Conf "  " $Config2["General"]
 }
 
+function Update-Conf($config, $updates) {
+    foreach ($i in $updates.keys) {
+        $config[$i] = $updates[$i]
+    }
+}
+
+function Update-AllConf($updates) {
+    Update-Conf $Config1["launcher"] $updates
+    if ($Config1["General"]) {
+        Update-Conf $Config1["General"] $updates
+    }
+    Update-Conf $Config2["General"] $updates
+}
+
 Show-AllConf
 
 if ($Config1["launcher"].cps -eq "bilibili") {
     Write-Host "It's bilibili server, swith to mihoyo server." -ForegroundColor $NoticeColor
-    $Config1["launcher"].cps = "mihoyo"
-    $Config1["launcher"].channel = 1
-    $Config1["launcher"].sub_channel = 1
-    if ($config1["General"]) {
-        $Config1["General"].cps = "mihoyo"
-        $Config1["General"].channel = 1
-        $Config1["General"].sub_channel = 1
-    }
-    $Config2["General"].cps = "mihoyo"
-    $Config2["General"].channel = 1
-    $Config2["General"].sub_channel = 1
+    Update-AllConf $Configs.mihoyo
 }
 else {
     Write-Host "It isn't bilibili server, swith to bilibili server." -ForegroundColor $NoticeColor
-    $Config1["launcher"].cps = "bilibili"
-    $Config1["launcher"].channel = 14
-    $Config1["launcher"].sub_channel = 0
-    if ($config1["General"]) {
-        $Config1["General"].cps = "bilibili"
-        $Config1["General"].channel = 14
-        $Config1["General"].sub_channel = 0
-    }
-    $Config2["General"].cps = "bilibili"
-    $Config2["General"].channel = 14
-    $Config2["General"].sub_channel = 0
+    Update-AllConf $Configs.bilibili
 }
 
 
@@ -184,6 +183,8 @@ while ($confirmation -ne "y") {
 Out-IniFile $Config1 $Config1Path
 Out-IniFile $Config2 $Config2Path
 
+Write-Host "Config updated" -ForegroundColor $NoticeColor
+
 Show-AllConf
 
 if (!(Test-Path "$GenshinRoot/Genshin Impact Game/YuanShen_Data/Plugins")) {
@@ -192,9 +193,13 @@ if (!(Test-Path "$GenshinRoot/Genshin Impact Game/YuanShen_Data/Plugins")) {
     Copy-Item $ScriptRoot/PCGameSDK.dll "$GenshinRoot/Genshin Impact Game/YuanShen_Data/Plugins"
 }
 
-Write-Host 'Done, Press any key to exit. Specailly, Press "y" to run Genshin Impact' -ForegroundColor $SuccessColor
-$key = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
-if ($key.Character -eq "y") {
-    Write-Host "Run Genshin Impact" -ForegroundColor $NoticeColor
-    Start-Process "$GenshinRoot/Genshin Impact Game/YuanShen.exe"
-}
+Write-Host 'Success, Press any key to exit.' -ForegroundColor $SuccessColor
+$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
+
+# * won't use bilibili server, if run YuanShn.exe directly *
+# Write-Host 'Done, Press any key to exit. Specailly, Press "y" to run Genshin Impact' -ForegroundColor $SuccessColor
+# $key = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
+# if ($key.Character -eq "y") {
+#     Write-Host "Run Genshin Impact" -ForegroundColor $NoticeColor
+#     Start-Process "$GenshinRoot/Genshin Impact Game/YuanShen.exe"
+# }
