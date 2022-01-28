@@ -170,7 +170,7 @@ else {
 }
 
 
-$confirmation = Read-Host "Execute? [y/n]" -ForegroundColor $NoticeColor
+$confirmation = Read-Host "Execute? [y/n]"
 while ($confirmation -ne "y") {
     if ($confirmation -eq 'n') {
         Write-Host "Cancel to execute, nothing changed." -ForegroundColor $NoticeColor
@@ -195,6 +195,6 @@ if (!(Test-Path "$GenshinRoot/Genshin Impact Game/YuanShen_Data/Plugins")) {
 Write-Host 'Done, Press any key to exit. Specailly, Press "y" to run Genshin Impact' -ForegroundColor $SuccessColor
 $key = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
 if ($key.Character -eq "y") {
-    Write-Output "Run Genshin Impact" -ForegroundColor $NoticeColor
+    Write-Host "Run Genshin Impact" -ForegroundColor $NoticeColor
     Start-Process "$GenshinRoot/Genshin Impact Game/YuanShen.exe"
 }
