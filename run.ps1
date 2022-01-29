@@ -17,7 +17,7 @@ $MayRootName = @(
 )
 $MayExistPaths = Get-PSDrive -PSProvider FileSystem | ForEach-Object {
     $DriverName = $_.Name
-    $MayRootName | ForEach-Object { $DriverName + ":\网络游戏\原神\" + $_ } 
+    $MayRootName | ForEach-Object { $DriverName + ":\脥酶脗莽脫脦脧路\脭颅脡帽\" + $_ } 
 }
 
 $ScriptRoot = $PSScriptRoot
@@ -187,7 +187,7 @@ Write-Host "Config updated" -ForegroundColor $NoticeColor
 
 Show-AllConf
 
-if (!(Test-Path "$GenshinRoot/Genshin Impact Game/YuanShen_Data/Plugins")) {
+if (!(Test-Path "$GenshinRoot/Genshin Impact Game/YuanShen_Data/Plugins/PCGameSDK.dll")) {
     # copy PCGameSDK.dll to Genshin Impact Game, if this dll not exist
     Write-Host "PCGameSDK.dll not exist, copy it" -ForegroundColor $NoticeColor
     Copy-Item $ScriptRoot/PCGameSDK.dll "$GenshinRoot/Genshin Impact Game/YuanShen_Data/Plugins"
