@@ -17,7 +17,7 @@ $MayRootName = @(
 )
 $MayExistPaths = Get-PSDrive -PSProvider FileSystem | ForEach-Object {
     $DriverName = $_.Name
-    $MayRootName | ForEach-Object { $DriverName + ":\ÍøÂçÓÎÏ·\Ô­Éñ\" + $_ } 
+    $MayRootName | ForEach-Object { $DriverName + ":\???????��\????\" + $_ } 
 }
 
 $ScriptRoot = $PSScriptRoot
