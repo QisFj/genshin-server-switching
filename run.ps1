@@ -17,7 +17,7 @@ $MayRootName = @(
 )
 $MayExistPaths = Get-PSDrive -PSProvider FileSystem | ForEach-Object {
     $DriverName = $_.Name
-    $MayRootName | ForEach-Object { $DriverName + ":\网络游戏\原神" + $_ } 
+    $MayRootName | ForEach-Object { $DriverName + ":\网络游戏\原神\" + $_ } 
 }
 
 $ScriptRoot = $PSScriptRoot
