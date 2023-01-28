@@ -258,17 +258,17 @@ ExpeditionCharacter(targetPosX, targetPoxY, charPosX, charPosY){
 
     BlockInput, MouseMove
     Click %targetPosX%, %targetPoxY%
-    Sleep 100
+    Sleep 100 * sleepFactor
     Click %use_rbb_x%, %use_rbb_y% ; 领取
-    Sleep 250
+    Sleep 250 * sleepFactor
     Click ; 关闭 领取页
-    Sleep 250
+    Sleep 250 * sleepFactor
     Click %use_20h_x%, %use_20h_y% ; 20h
-    Sleep 100
+    Sleep 100 * sleepFactor
     Click %use_rbb_x%, %use_rbb_y% ; 选择角色
-    Sleep 250
+    Sleep 250 * sleepFactor
     Click %charPosX%, %charPosY%
-    Sleep 250
+    Sleep 250 * sleepFactor
     BlockInput, MouseMoveOff
 }
 
@@ -301,32 +301,32 @@ ExpeditionAll(){
     global use_tbs_y
 
     Send, {f}
-    Sleep 1000
+    Sleep 1000 * sleepFactor
     Send, {f}
-    Sleep 1000
+    Sleep 1000 * sleepFactor
     Click %use_ksl_x%, %use_ksl_y% ; 蒙德 凯瑟琳
-    Sleep 500
+    Sleep 500 * sleepFactor
 
     ; 蒙德
     Click %use_md_x%, %use_md_y%
-    Sleep 500
+    Sleep 500 * sleepFactor
 
     ExpeditionCharacter(use_dysl_x, use_dysl_y, use_1st_x, use_1st_y) ; 低语森林     菲谢尔
     ExpeditionCharacter(use_ddpw_x, use_ddpw_y, use_2nd_x, use_2nd_y) ; 达达乌帕谷   班尼特
 
     ; 璃月
     Click %use_ly_x%, %use_ly_y%
-    Sleep 500
+    Sleep 500 * sleepFactor
     
     ExpeditionCharacter(use_ygt_x, use_ygt_y, use_1st_x, use_1st_y) ; 摇光滩   刻晴
     ExpeditionCharacter(use_gly_x, use_gly_y, use_2nd_x, use_2nd_y) ; 归离原   重云
 
     ; 稻妻
     Click %use_dq_x%, %use_dq_y%
-    Sleep 800
+    Sleep 800 * sleepFactor
     
     ExpeditionCharacter(use_tbs_x, use_tbs_y, use_1st_x, use_1st_y) ; 踏鞴砂  九条裟罗
 
-    Sleep 400
+    Sleep 400 * sleepFactor
     Send, {esc}
 }

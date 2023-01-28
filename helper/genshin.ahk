@@ -22,6 +22,7 @@ SetTimer, Repeat, 150
 repeatClickLeft:=1
 spaceWait:=0
 resolution:="2560x1440"
+sleepFactor:=1
 Gui, Add, Text, w400 h16, Usage:
 Gui, Add, Text, w400 h16 y+5, F键   连发
 Gui, Add, Text, w400 h16 y+5, Space 连发
@@ -32,8 +33,11 @@ Gui, Add, Text, w400 h16 y+10, Options:
 Gui, Add, CheckBox,w400 h16 y+5 gOnSubmmit vrepeatClickLeft Checked, 左键连发，长按鼠标前侧键触发
 Gui, Add, CheckBox,w400 h16 y+5 gOnSubmmit vspaceWait, 空格连发延迟触发，离开浪船需要长按空格
 
-Gui, Add, Text,  h16 y+5, 分辨率
+Gui, Add, Text, w80 h16 y+5, 分辨率
 Gui, Add, DropDownList, x+16 yp-2 gOnSubmmit Choose1 vresolution, 2560x1440|1920x1080
+
+Gui, Add, Text, w80 h16 xm y+5, SleepFactor
+Gui, Add, DropDownList, x+16 yp-2 gOnSubmmit Choose1 vsleepFactor, 1|2|3|4|5
 
 Gui, Add, Button, xm y+10 gOnClickDebugInfo Default w80, Debug Info
 
@@ -54,6 +58,7 @@ OnClickDebugInfo:
 repeatClickLeft:    %repeatClickLeft%
 spaceWait:          %spaceWait%
 resolution:         %resolution%
+sleepFactor:        %sleepFactor%
     )
 Return
 
