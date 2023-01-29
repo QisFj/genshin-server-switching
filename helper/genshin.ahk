@@ -22,7 +22,7 @@ SetTimer, Repeat, 150
 repeatClickLeft:=1
 spaceWait:=0
 resolution:="2560x1440"
-sleepFactor:=1
+sleepOffset:=1
 Gui, Add, Text, w400 h16, Usage:
 Gui, Add, Text, w400 h16 y+5, F键   连发
 Gui, Add, Text, w400 h16 y+5, Space 连发
@@ -36,8 +36,9 @@ Gui, Add, CheckBox,w400 h16 y+5 gOnSubmmit vspaceWait, 空格连发延迟触发�
 Gui, Add, Text, w80 h16 y+5, 分辨率
 Gui, Add, DropDownList, x+16 yp-2 gOnSubmmit Choose1 vresolution, 2560x1440|1920x1080
 
-Gui, Add, Text, w80 h16 xm y+5, SleepFactor
-Gui, Add, DropDownList, x+16 yp-2 gOnSubmmit Choose1 vsleepFactor, 1|2|3|4|5
+Gui, Add, Text, w80 h16 xm y+5, SleepOffset
+Gui, Add, Edit, x+16 yp-2 gOnSubmmit
+Gui, Add, UpDown, gOnSubmmit vsleepOffset Range-10-10, 0
 
 Gui, Add, Button, xm y+10 gOnClickDebugInfo Default w80, Debug Info
 
@@ -58,7 +59,7 @@ OnClickDebugInfo:
 repeatClickLeft:    %repeatClickLeft%
 spaceWait:          %spaceWait%
 resolution:         %resolution%
-sleepFactor:        %sleepFactor%
+sleepOffset:        %sleepOffset%
     )
 Return
 
@@ -119,6 +120,7 @@ F6::
     Case "2560x1440": Use2560x1440()
     Case "1920x1080": Use1920x1080()
     }
+    SetSleepOffset(sleepOffset)
     ExpeditionAll()
 Return
 

@@ -227,6 +227,16 @@ Use1920x1080(){
     use_tbs_y=%1920x1080_tbs_y%
 }
 
+sleepOffset:=0
+sleepFactorBase:=0.2
+sleepFactor:=1
+SetSleepOffset(offset){
+    global sleepOffset
+    global sleepFactorBase
+    global sleepFactor
+    sleepOffset:=offset
+    sleepFactor:=1+(sleepFactorBase*sleepOffset)
+}
 
 ExpeditionCharacter(targetPosX, targetPoxY, charPosX, charPosY){
     global use_ksl_x
@@ -255,6 +265,7 @@ ExpeditionCharacter(targetPosX, targetPoxY, charPosX, charPosY){
     global use_gly_y
     global use_tbs_x
     global use_tbs_y
+    global sleepFactor
 
     BlockInput, MouseMove
     Click %targetPosX%, %targetPoxY%
@@ -271,6 +282,8 @@ ExpeditionCharacter(targetPosX, targetPoxY, charPosX, charPosY){
     Sleep 250 * sleepFactor
     BlockInput, MouseMoveOff
 }
+
+
 
 ExpeditionAll(){
     global use_ksl_x
@@ -299,6 +312,7 @@ ExpeditionAll(){
     global use_gly_y
     global use_tbs_x
     global use_tbs_y
+    global sleepFactor
 
     Send, {f}
     Sleep 1000 * sleepFactor
